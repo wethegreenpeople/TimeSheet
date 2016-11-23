@@ -148,7 +148,7 @@ namespace TimeSheet
             string mondayBreakStart = mondayHours.Split(',').ElementAt(1);
             string mondayBreakEnd = mondayHours.Split(',').ElementAt(2);
             string mondayEnd = mondayHours.Split(',').ElementAt(3);
-            string mondayTotal = mondayHours.Split(',').ElementAt(4);
+            string mondayTotal = mondayHours.Split(',').ElementAt(4).TrimStart(' ');
             
             // Variables for tuesday's hours
             string tuesdayHours = File.ReadLines("hours.txt").Skip(3).Take(1).First();
@@ -157,7 +157,7 @@ namespace TimeSheet
             string tuesdayBreakStart = tuesdayHours.Split(',').ElementAt(1);
             string tuesdayBreakEnd = tuesdayHours.Split(',').ElementAt(2);
             string tuesdayEnd = tuesdayHours.Split(',').ElementAt(3);
-            string tuesdayTotal = tuesdayHours.Split(',').ElementAt(4);
+            string tuesdayTotal = tuesdayHours.Split(',').ElementAt(4).TrimStart(' ');
 
             // Variables for wednesday's hours
             string wednesdayHours = File.ReadLines("hours.txt").Skip(4).Take(1).First();
@@ -166,7 +166,7 @@ namespace TimeSheet
             string wednesdayBreakStart = wednesdayHours.Split(',').ElementAt(1);
             string wednesdayBreakEnd = wednesdayHours.Split(',').ElementAt(2);
             string wednesdayEnd = wednesdayHours.Split(',').ElementAt(3);
-            string wednesdayTotal = wednesdayHours.Split(',').ElementAt(4);
+            string wednesdayTotal = wednesdayHours.Split(',').ElementAt(4).TrimStart(' ');
 
             // Variables for Thursday's hours
             string thursdayHours = File.ReadLines("hours.txt").Skip(5).Take(1).First();
@@ -175,7 +175,7 @@ namespace TimeSheet
             string thursdayBreakStart = thursdayHours.Split(',').ElementAt(1);
             string thursdayBreakEnd = thursdayHours.Split(',').ElementAt(2);
             string thursdayEnd = thursdayHours.Split(',').ElementAt(3);
-            string thursdayTotal = thursdayHours.Split(',').ElementAt(4);
+            string thursdayTotal = thursdayHours.Split(',').ElementAt(4).TrimStart(' ');
 
             // Variables for Friday's hours
             string fridayHours = File.ReadLines("hours.txt").Skip(6).Take(1).First();
@@ -184,7 +184,7 @@ namespace TimeSheet
             string fridayBreakStart = fridayHours.Split(',').ElementAt(1);
             string fridayBreakEnd = fridayHours.Split(',').ElementAt(2);
             string fridayEnd = fridayHours.Split(',').ElementAt(3);
-            string fridayTotal = fridayHours.Split(',').ElementAt(4);
+            string fridayTotal = fridayHours.Split(',').ElementAt(4).TrimStart(' ');
 
             using (var existingFileStream = new FileStream(fileNameExisting, FileMode.Open))
             using (var newFileStream = new FileStream(fileNameNew, FileMode.Create))
@@ -193,7 +193,7 @@ namespace TimeSheet
                 var pdfReader = new PdfReader(existingFileStream);
 
                 // PdfStamper, which will create
-                var stamper = new PdfStamper(pdfReader, newFileStream);
+                var stamper = new PdfStamper(pdfReader, newFileStream, '\0', true);
 
                 var form = stamper.AcroFields;
                 var fieldKeys = form.Fields.Keys;
@@ -235,172 +235,186 @@ namespace TimeSheet
 
                 int x = 16;
                 // Adding working in hours
-                foreach (string fieldKey in fieldKeys)
+                try
                 {
-                    for (int i = 1; i < x; ++i)
+                    foreach (string fieldKey in fieldKeys)
                     {
-                        if (a.Equals(listBox1.SelectedItem))
+                        for (int i = 1; i < x; ++i)
                         {
-                            if (fieldKey.Equals("Work StartRow" + i))
+                            // 1st - 15th
+                            if (a.Equals(listBox1.SelectedItem))
                             {
-                                switch (dateValue.AddDays(i - 1).ToString("ddd"))
+                                if (fieldKey.Equals("Work StartRow" + i))
                                 {
-                                    case "Mon":
-                                        form.SetField(fieldKey, mondayStart);
-                                        form.SetField("Work EndRow" + i, mondayEnd);
-                                        form.SetField("Break OutRow" + i, mondayBreakStart);
-                                        form.SetField("Break InRow" + i, mondayBreakEnd);
-                                        form.SetField("HoursRow" + i, mondayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(mondayTotal);
-                                        break;
-                                    case "Tue":
-                                        form.SetField(fieldKey, tuesdayStart);
-                                        form.SetField("Work EndRow" + i, tuesdayEnd);
-                                        form.SetField("Break OutRow" + i, tuesdayBreakStart);
-                                        form.SetField("Break InRow" + i, tuesdayBreakEnd);
-                                        form.SetField("HoursRow" + i, tuesdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(tuesdayTotal);
-                                        break;
-                                    case "Wed":
-                                        form.SetField(fieldKey, wednesdayStart);
-                                        form.SetField("Work EndRow" + i, wednesdayEnd);
-                                        form.SetField("Break OutRow" + i, wednesdayBreakStart);
-                                        form.SetField("Break InRow" + i, wednesdayBreakEnd);
-                                        form.SetField("HoursRow" + i, wednesdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(wednesdayTotal);
-                                        break;
-                                    case "Thu":
-                                        form.SetField(fieldKey, thursdayStart);
-                                        form.SetField("Work EndRow" + i, thursdayEnd);
-                                        form.SetField("Break OutRow" + i, thursdayBreakStart);
-                                        form.SetField("Break InRow" + i, thursdayBreakEnd);
-                                        form.SetField("HoursRow" + i, thursdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(thursdayTotal);
-                                        break;
-                                    case "Fri":
-                                        form.SetField(fieldKey, fridayStart);
-                                        form.SetField("Work EndRow" + i, fridayEnd);
-                                        form.SetField("Break OutRow" + i, fridayBreakStart);
-                                        form.SetField("Break InRow" + i, fridayBreakEnd);
-                                        form.SetField("HoursRow" + i, fridayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(fridayTotal);
-                                        break;
-                                    default:
+                                    switch (dateValue.AddDays(i - 1).ToString("ddd"))
+                                    {
+                                        case "Mon":
+                                            form.SetField(fieldKey, mondayStart);
+                                            form.SetField("Work EndRow" + i, mondayEnd);
+                                            form.SetField("Break OutRow" + i, mondayBreakStart);
+                                            form.SetField("Break InRow" + i, mondayBreakEnd);
+                                            form.SetField("HoursRow" + i, mondayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(mondayTotal);
+                                            break;
+                                        case "Tue":
+                                            form.SetField(fieldKey, tuesdayStart);
+                                            form.SetField("Work EndRow" + i, tuesdayEnd);
+                                            form.SetField("Break OutRow" + i, tuesdayBreakStart);
+                                            form.SetField("Break InRow" + i, tuesdayBreakEnd);
+                                            form.SetField("HoursRow" + i, tuesdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(tuesdayTotal);
+                                            break;
+                                        case "Wed":
+                                            form.SetField(fieldKey, wednesdayStart);
+                                            form.SetField("Work EndRow" + i, wednesdayEnd);
+                                            form.SetField("Break OutRow" + i, wednesdayBreakStart);
+                                            form.SetField("Break InRow" + i, wednesdayBreakEnd);
+                                            form.SetField("HoursRow" + i, wednesdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(wednesdayTotal);
+                                            break;
+                                        case "Thu":
+                                            form.SetField(fieldKey, thursdayStart);
+                                            form.SetField("Work EndRow" + i, thursdayEnd);
+                                            form.SetField("Break OutRow" + i, thursdayBreakStart);
+                                            form.SetField("Break InRow" + i, thursdayBreakEnd);
+                                            form.SetField("HoursRow" + i, thursdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(thursdayTotal);
+                                            break;
+                                        case "Fri":
+                                            form.SetField(fieldKey, fridayStart);
+                                            form.SetField("Work EndRow" + i, fridayEnd);
+                                            form.SetField("Break OutRow" + i, fridayBreakStart);
+                                            form.SetField("Break InRow" + i, fridayBreakEnd);
+                                            form.SetField("HoursRow" + i, fridayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(fridayTotal);
+                                            break;
+                                        default:
 
-                                        break;
+                                            break;
+                                    }
                                 }
                             }
-                        }
 
-                        else if (b.Equals(listBox1.SelectedItem))
-                        {
-                            if (fieldKey.Equals("Work StartRow" + i))
+                            //16th - 30th
+                            else if (b.Equals(listBox1.SelectedItem))
                             {
-                                switch (dateValue.AddDays(i + 15 - 1).ToString("ddd"))
+                                if (fieldKey.Equals("Work StartRow" + i))
                                 {
-                                    case "Mon":
-                                        form.SetField(fieldKey, mondayStart);
-                                        form.SetField("Work EndRow" + i, mondayEnd);
-                                        form.SetField("Break OutRow" + i, mondayBreakStart);
-                                        form.SetField("Break InRow" + i, mondayBreakEnd);
-                                        form.SetField("HoursRow" + i, mondayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(mondayTotal);
-                                        break;
-                                    case "Tue":
-                                        form.SetField(fieldKey, tuesdayStart);
-                                        form.SetField("Work EndRow" + i, tuesdayEnd);
-                                        form.SetField("Break OutRow" + i, tuesdayBreakStart);
-                                        form.SetField("Break InRow" + i, tuesdayBreakEnd);
-                                        form.SetField("HoursRow" + i, tuesdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(tuesdayTotal);
-                                        break;
-                                    case "Wed":
-                                        form.SetField(fieldKey, wednesdayStart);
-                                        form.SetField("Work EndRow" + i, wednesdayEnd);
-                                        form.SetField("Break OutRow" + i, wednesdayBreakStart);
-                                        form.SetField("Break InRow" + i, wednesdayBreakEnd);
-                                        form.SetField("HoursRow" + i, wednesdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(wednesdayTotal);
-                                        break;
-                                    case "Thu":
-                                        form.SetField(fieldKey, thursdayStart);
-                                        form.SetField("Work EndRow" + i, thursdayEnd);
-                                        form.SetField("Break OutRow" + i, thursdayBreakStart);
-                                        form.SetField("Break InRow" + i, thursdayBreakEnd);
-                                        form.SetField("HoursRow" + i, thursdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(thursdayTotal);
-                                        break;
-                                    case "Fri":
-                                        form.SetField(fieldKey, fridayStart);
-                                        form.SetField("Work EndRow" + i, fridayEnd);
-                                        form.SetField("Break OutRow" + i, fridayBreakStart);
-                                        form.SetField("Break InRow" + i, fridayBreakEnd);
-                                        form.SetField("HoursRow" + i, fridayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(fridayTotal);
-                                        break;
-                                    default:
-                                        
-                                        break;
+                                    switch (dateValue.AddDays(i + 15 - 1).ToString("ddd"))
+                                    {
+                                        case "Mon":
+                                            form.SetField(fieldKey, mondayStart);
+                                            form.SetField("Work EndRow" + i, mondayEnd);
+                                            form.SetField("Break OutRow" + i, mondayBreakStart);
+                                            form.SetField("Break InRow" + i, mondayBreakEnd);
+                                            form.SetField("HoursRow" + i, mondayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(mondayTotal);
+                                            break;
+                                        case "Tue":
+                                            form.SetField(fieldKey, tuesdayStart);
+                                            form.SetField("Work EndRow" + i, tuesdayEnd);
+                                            form.SetField("Break OutRow" + i, tuesdayBreakStart);
+                                            form.SetField("Break InRow" + i, tuesdayBreakEnd);
+                                            form.SetField("HoursRow" + i, tuesdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(tuesdayTotal);
+                                            break;
+                                        case "Wed":
+                                            form.SetField(fieldKey, wednesdayStart);
+                                            form.SetField("Work EndRow" + i, wednesdayEnd);
+                                            form.SetField("Break OutRow" + i, wednesdayBreakStart);
+                                            form.SetField("Break InRow" + i, wednesdayBreakEnd);
+                                            form.SetField("HoursRow" + i, wednesdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(wednesdayTotal);
+                                            break;
+                                        case "Thu":
+                                            form.SetField(fieldKey, thursdayStart);
+                                            form.SetField("Work EndRow" + i, thursdayEnd);
+                                            form.SetField("Break OutRow" + i, thursdayBreakStart);
+                                            form.SetField("Break InRow" + i, thursdayBreakEnd);
+                                            form.SetField("HoursRow" + i, thursdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(thursdayTotal);
+                                            break;
+                                        case "Fri":
+                                            form.SetField(fieldKey, fridayStart);
+                                            form.SetField("Work EndRow" + i, fridayEnd);
+                                            form.SetField("Break OutRow" + i, fridayBreakStart);
+                                            form.SetField("Break InRow" + i, fridayBreakEnd);
+                                            form.SetField("HoursRow" + i, fridayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(fridayTotal);
+                                            break;
+                                        default:
+
+                                            break;
+                                    }
                                 }
                             }
-                        }
 
-                        else if (c.Equals(listBox1.SelectedItem))
-                        {
-                            x = 17;
-                            if (fieldKey.Equals("Work StartRow" + i))
+                            //16th - 30th
+                            if (c.Equals(listBox1.SelectedItem))
                             {
-                                switch (dateValue.AddDays(i + 15 - 1).ToString("ddd"))
+                                x = 17;
+                                if (fieldKey.Equals("Work StartRow" + i))
                                 {
-                                    case "Mon":
-                                        form.SetField(fieldKey, mondayStart);
-                                        form.SetField("Work EndRow" + i, mondayEnd);
-                                        form.SetField("Break OutRow" + i, mondayBreakStart);
-                                        form.SetField("Break InRow" + i, mondayBreakEnd);
-                                        form.SetField("HoursRow" + i, mondayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(mondayTotal);
-                                        break;
-                                    case "Tue":
-                                        form.SetField(fieldKey, tuesdayStart);
-                                        form.SetField("Work EndRow" + i, tuesdayEnd);
-                                        form.SetField("Break OutRow" + i, tuesdayBreakStart);
-                                        form.SetField("Break InRow" + i, tuesdayBreakEnd);
-                                        form.SetField("HoursRow" + i, tuesdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(tuesdayTotal);
-                                        break;
-                                    case "Wed":
-                                        form.SetField(fieldKey, wednesdayStart);
-                                        form.SetField("Work EndRow" + i, wednesdayEnd);
-                                        form.SetField("Break OutRow" + i, wednesdayBreakStart);
-                                        form.SetField("Break InRow" + i, wednesdayBreakEnd);
-                                        form.SetField("HoursRow" + i, wednesdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(wednesdayTotal);
-                                        break;
-                                    case "Thu":
-                                        form.SetField(fieldKey, thursdayStart);
-                                        form.SetField("Work EndRow" + i, thursdayEnd);
-                                        form.SetField("Break OutRow" + i, thursdayBreakStart);
-                                        form.SetField("Break InRow" + i, thursdayBreakEnd);
-                                        form.SetField("HoursRow" + i, thursdayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(thursdayTotal);
-                                        break;
-                                    case "Fri":
-                                        form.SetField(fieldKey, fridayStart);
-                                        form.SetField("Work EndRow" + i, fridayEnd);
-                                        form.SetField("Break OutRow" + i, fridayBreakStart);
-                                        form.SetField("Break InRow" + i, fridayBreakEnd);
-                                        form.SetField("HoursRow" + i, fridayTotal);
-                                        hoursTotalInt = hoursTotalInt + Double.Parse(fridayTotal);
-                                        break;
-                                    default:
+                                    switch (dateValue.AddDays(i + 15 - 1).ToString("ddd"))
+                                    {
+                                        case "Mon":
+                                            form.SetField(fieldKey, mondayStart);
+                                            form.SetField("Work EndRow" + i, mondayEnd);
+                                            form.SetField("Break OutRow" + i, mondayBreakStart);
+                                            form.SetField("Break InRow" + i, mondayBreakEnd);
+                                            form.SetField("HoursRow" + i, mondayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(mondayTotal);
+                                            break;
+                                        case "Tue":
+                                            form.SetField(fieldKey, tuesdayStart);
+                                            form.SetField("Work EndRow" + i, tuesdayEnd);
+                                            form.SetField("Break OutRow" + i, tuesdayBreakStart);
+                                            form.SetField("Break InRow" + i, tuesdayBreakEnd);
+                                            form.SetField("HoursRow" + i, tuesdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(tuesdayTotal);
+                                            break;
+                                        case "Wed":
+                                            form.SetField(fieldKey, wednesdayStart);
+                                            form.SetField("Work EndRow" + i, wednesdayEnd);
+                                            form.SetField("Break OutRow" + i, wednesdayBreakStart);
+                                            form.SetField("Break InRow" + i, wednesdayBreakEnd);
+                                            form.SetField("HoursRow" + i, wednesdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(wednesdayTotal);
+                                            break;
+                                        case "Thu":
+                                            form.SetField(fieldKey, thursdayStart);
+                                            form.SetField("Work EndRow" + i, thursdayEnd);
+                                            form.SetField("Break OutRow" + i, thursdayBreakStart);
+                                            form.SetField("Break InRow" + i, thursdayBreakEnd);
+                                            form.SetField("HoursRow" + i, thursdayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(thursdayTotal);
+                                            break;
+                                        case "Fri":
+                                            form.SetField(fieldKey, fridayStart);
+                                            form.SetField("Work EndRow" + i, fridayEnd);
+                                            form.SetField("Break OutRow" + i, fridayBreakStart);
+                                            form.SetField("Break InRow" + i, fridayBreakEnd);
+                                            form.SetField("HoursRow" + i, fridayTotal);
+                                            hoursTotalInt = hoursTotalInt + Double.Parse(fridayTotal);
+                                            break;
+                                        default:
 
-                                        break;
+                                            break;
+                                    }
                                 }
-                            }
-                        }
 
+
+                            }
+
+                        }
                     }
                 }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                
 
 
                 foreach (string fieldKey in fieldKeys)
@@ -575,6 +589,11 @@ namespace TimeSheet
             else if (c.Equals(listBox1.SelectedItem))
             {
                 ReplacePdfForm();
+            }
+            // catching if user hasn't selected a date range
+            else
+            {
+                MessageBox.Show("Please select a date range before trying to generate timesheet!", "Error", MessageBoxButtons.OK);
             }
 
              
