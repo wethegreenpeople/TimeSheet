@@ -23,118 +23,120 @@ namespace TimeSheet
 
         public string dateRange;
 
-        public void AddToCalendar()
+        public void AddToCalendar(bool update)
         {
-            UserCredential credential;
-
-            using (var stream =
-                new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            if (update == true)
             {
-                string credPath = System.Environment.GetFolderPath(
-                    System.Environment.SpecialFolder.Personal);
-                credPath = Path.Combine(credPath, ".credentials/calendar-dotnet-quickstart.json");
+                UserCredential credential;
 
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-                //Console.WriteLine("Credential file saved to: " + credPath);
-            }
+                using (var stream =
+                    new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+                {
+                    string credPath = System.Environment.GetFolderPath(
+                        System.Environment.SpecialFolder.Personal);
+                    credPath = Path.Combine(credPath, ".credentials/calendar-dotnet-quickstart.json");
 
-            // Create Google Calendar API service.
-            var service = new CalendarService(new BaseClientService.Initializer()
+                    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.Load(stream).Secrets,
+                        Scopes,
+                        "user",
+                        CancellationToken.None,
+                        new FileDataStore(credPath, true)).Result;
+                    //Console.WriteLine("Credential file saved to: " + credPath);
+                }
+
+                // Create Google Calendar API service.
+                var service = new CalendarService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credential,
                     ApplicationName = ApplicationName,
                 });
 
-            ParseHours hours = new ParseHours();
-            hours.HoursWorked();
-            DateTime dateValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            Form1 listbox = new Form1();
+                ParseHours hours = new ParseHours();
+                hours.HoursWorked();
+                DateTime dateValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                Form1 listbox = new Form1();
 
-            string calendarDate = "1/1/2017 ";
-            
-            Event newEvent = new Event()
-            {
-                Summary = "Working",
-                Location = "7000 Dandini BLVD Reno NV 89512",
-                Description = "Working during this time",
-                Start = new EventDateTime()
+                string calendarDate = "1/1/2017 ";
+
+                Event newEvent = new Event()
                 {
-                    DateTime = DateTime.Parse(calendarDate + "8:00 AM"),
-                    TimeZone = "America/Los_Angeles",
-                },
-                End = new EventDateTime()
-                {
-                    DateTime = DateTime.Parse(calendarDate + "8:00 AM"),
-                    TimeZone = "America/Los_Angeles",
-                },
-                Recurrence = new String[] {
+                    Summary = "Working",
+                    Location = "7000 Dandini BLVD Reno NV 89512",
+                    Description = "Working during this time",
+                    Start = new EventDateTime()
+                    {
+                        DateTime = DateTime.Parse(calendarDate + "8:00 AM"),
+                        TimeZone = "America/Los_Angeles",
+                    },
+                    End = new EventDateTime()
+                    {
+                        DateTime = DateTime.Parse(calendarDate + "8:00 AM"),
+                        TimeZone = "America/Los_Angeles",
+                    },
+                    Recurrence = new String[] {
                     "RRULE:FREQ=WEEKLY;COUNT=2"
                 },
-                Reminders = new Event.RemindersData()
+                    Reminders = new Event.RemindersData()
+                    {
+                        UseDefault = true,
+                    }
+                };
+
+                String calendarId = "primary";
+                EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
+                string dateText;
+
+                int i = 0;
+                int x = 0;
+
+                if (dateRange == "1st - 15th")
                 {
-                    UseDefault = true,
+                    i = 1;
+                    x = i + 7;
                 }
-            };
-
-            String calendarId = "primary";
-            EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
-            string dateText;
-
-            int i = 0;
-            int x = 0;
-
-            if (dateRange == "1st - 15th")
-            {
-                i = 1;
-                x = i + 7;
-            }
-            else if (dateRange == "16th - 30th")
-            {
-                i = 16;
-                x = i + 7;
-            }
-            else if (dateRange == "16th - 31st")
-            {
-                i = 16;
-                x = i + 8;
-            }
-
-            while(i < x)
+                else if (dateRange == "16th - 30th")
                 {
-                    if (dateValue.AddDays(i - 1).ToString("ddd") == "Mon" && hours.mondayStart != " 0")
+                    i = 16;
+                    x = i + 7;
+                }
+                else if (dateRange == "16th - 31st")
+                {
+                    i = 16;
+                    x = i + 8;
+                }
+
+                while (i < x)
+                {
+                    if (dateValue.AddDays(i - 1).ToString("ddd") == "Mon" && hours.mondayStart != "0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.mondayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.mondayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Tue" && hours.tuesdayStart != " 0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Tue" && hours.tuesdayStart != "0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.tuesdayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.tuesdayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Wed" && hours.wednesdayStart != " 0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Wed" && hours.wednesdayStart != "0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.wednesdayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.wednesdayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Thu" && hours.thursdayStart != " 0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Thu" && hours.thursdayStart != "0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.thursdayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.thursdayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Fri" && hours.fridayStart != " 0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Fri" && hours.fridayStart != "0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.fridayStart);
@@ -146,8 +148,8 @@ namespace TimeSheet
                 }
 
 
-            //Console.WriteLine("Event created: {0}", createdEvent.HtmlLink);
-
+                //Console.WriteLine("Event created: {0}", createdEvent.HtmlLink);
+            }
         }
     }
 }

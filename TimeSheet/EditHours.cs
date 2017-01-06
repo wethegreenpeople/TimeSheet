@@ -58,43 +58,100 @@ namespace TimeSheet
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            string monStart = textBoxMonStart.Text;
-            string monEnd = textBoxMonEnd.Text;
-            string monLunchIn = textBoxMonLunchIn.Text;
-            string monLunchOut = textBoxMonLunchOut.Text;
-            string monTotal = textBoxMonTotal.Text;
+            foreach (Control c in this.Controls)
+            {
+                if (c is TextBox)
+                {
+                    TextBox textBox = c as TextBox;
+                    if (string.IsNullOrWhiteSpace(textBox.Text) == true)
+                    {
+                        textBox.Text = "0";
+                    }
+                    // If not a total
+                    if (textBox.TabIndex != 5 && textBox.TabIndex != 10 && textBox.TabIndex != 15 && textBox.TabIndex != 20 && textBox.TabIndex != 25)
+                    {
+                        // If not a day that you're not working
+                        if (textBox.Text != "0")
+                        {
+                            if (textBox.Text.Contains("AM") == false && textBox.Text.Contains("PM") == false)
+                            {
+                                if (textBox.Text.Contains(':') == true)
+                                {
+                                    if (Convert.ToInt32(textBox.Text.Split(':').First().Trim()) > 6 && Convert.ToInt32(textBox.Text.Split(':').First().Trim()) <= 11)
+                                    {
+                                        textBox.Text = textBox.Text.Trim();
+                                        textBox.Text += " AM";
+                                    }
+                                    if (Convert.ToInt32(textBox.Text.Split(':').First().Trim()) <= 5 || Convert.ToInt32(textBox.Text.Split(':').First().Trim()) == 12)
+                                    {
+                                        textBox.Text = textBox.Text.Trim();
+                                        textBox.Text += " PM";
+                                    }
+                                }
+                                else
+                                {
+                                    if (Convert.ToInt32(textBox.Text.Trim()) > 6 && Convert.ToInt32(textBox.Text.Trim()) <= 11)
+                                    {
+                                        textBox.Text = textBox.Text.Trim();
+                                        textBox.Text += ":00 AM";
+                                    }
+                                    else if (Convert.ToInt32(textBox.Text.Trim()) <= 5 || Convert.ToInt32(textBox.Text.Trim()) == 12)
+                                    {
+                                        textBox.Text = textBox.Text.Trim();
+                                        textBox.Text += ":00 PM";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (textBox.TabIndex == 5 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
+                    {
+                        textBoxMonStart.Text = "8:00 AM";
+                        textBoxMonLunchOut.Text = "12:00 PM";
+                        textBoxMonLunchIn.Text = "1:00 PM";
+                        textBoxMonEnd.Text = "5:00 PM";
+                    }
+                    else if (textBox.TabIndex == 10 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
+                    {
+                        textBoxTueStart.Text = "8:00 AM";
+                        textBoxTueLunchOut.Text = "12:00 PM";
+                        textBoxTueLunchIn.Text = "1:00 PM";
+                        textBoxTueEnd.Text = "5:00 PM";
+                    }
+                    else if (textBox.TabIndex == 15 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
+                    {
+                        textBoxWedStart.Text = "8:00 AM";
+                        textBoxWedLunchOut.Text = "12:00 PM";
+                        textBoxWedLunchIn.Text = "1:00 PM";
+                        textBoxWedEnd.Text = "5:00 PM";
+                    }
+                    else if (textBox.TabIndex == 20 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
+                    {
+                        textBoxThurStart.Text = "8:00 AM";
+                        textBoxThurLunchOut.Text = "12:00 PM";
+                        textBoxThurLunchIn.Text = "1:00 PM";
+                        textBoxThurEnd.Text = "5:00 PM";
+                    }
+                    else if (textBox.TabIndex == 25 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
+                    {
+                        textBoxFriStart.Text = "8:00 AM";
+                        textBoxFriLunchOut.Text = "12:00 PM";
+                        textBoxFriLunchIn.Text = "1:00 PM";
+                        textBoxFriEnd.Text = "5:00 PM";
+                    }
+                }
+            }
 
-            string tueStart = textBoxTueStart.Text;
-            string tueEnd = textBoxTueEnd.Text;
-            string tueLunchIn = textBoxTueLunchIn.Text;
-            string tueLunchOut = textBoxTueLunchOut.Text;
-            string tueTotal = textBoxTueTotal.Text;
-
-            string wedStart = textBoxWedStart.Text;
-            string wedEnd = textBoxWedEnd.Text;
-            string wedLunchIn = textBoxWedLunchIn.Text;
-            string wedLunchOut = textBoxWedLunchOut.Text;
-            string wedTotal = textBoxWedTotal.Text;
-
-            string thurStart = textBoxThurStart.Text;
-            string thurEnd = textBoxThurEnd.Text;
-            string thurLunchIn = textBoxThurLunchIn.Text;
-            string thurLunchOut = textBoxThurLunchOut.Text;
-            string thurTotal = textBoxThurTotal.Text;
-
-            string friStart = textBoxFriStart.Text;
-            string friEnd = textBoxFriEnd.Text;
-            string friLunchIn = textBoxFriLunchIn.Text;
-            string friLunchOut = textBoxFriLunchOut.Text;
-            string friTotal = textBoxFriTotal.Text;
+            ParseHours hours = new ParseHours();
 
             string hoursFile =
                 "Day, Work Start, Lunch Out, Lunch In, Work End, Total Hours" + Environment.NewLine + Environment.NewLine +
-                String.Format("Mon) {0}, {1}, {2}, {3}, {4}", monStart, monLunchOut, monLunchIn, monEnd, monTotal) + Environment.NewLine +
-                String.Format("Tue) {0}, {1}, {2}, {3}, {4}", tueStart, tueLunchOut, tueLunchIn, tueEnd, tueTotal) + Environment.NewLine +
-                String.Format("Wed) {0}, {1}, {2}, {3}, {4}", wedStart, wedLunchOut, wedLunchIn, wedEnd, wedTotal) + Environment.NewLine +
-                String.Format("Thu) {0}, {1}, {2}, {3}, {4}", thurStart, thurLunchOut, thurLunchIn, thurEnd, thurTotal) + Environment.NewLine +
-                String.Format("Fri) {0}, {1}, {2}, {3}, {4}", friStart, friLunchOut, friLunchIn, friEnd, friTotal) + Environment.NewLine;
+                String.Format("Mon) {0}, {1}, {2}, {3}, {4}", textBoxMonStart.Text, textBoxMonLunchOut.Text, textBoxMonLunchIn.Text, textBoxMonEnd.Text, textBoxMonTotal.Text) + Environment.NewLine +
+                String.Format("Tue) {0}, {1}, {2}, {3}, {4}", textBoxTueStart.Text, textBoxTueLunchOut.Text, textBoxTueLunchIn.Text, textBoxTueEnd.Text, textBoxTueTotal.Text) + Environment.NewLine +
+                String.Format("Wed) {0}, {1}, {2}, {3}, {4}", textBoxWedStart.Text, textBoxWedLunchOut.Text, textBoxWedLunchIn.Text, textBoxWedEnd.Text, textBoxWedTotal.Text) + Environment.NewLine +
+                String.Format("Thu) {0}, {1}, {2}, {3}, {4}", textBoxThurStart.Text, textBoxThurLunchOut.Text, textBoxThurLunchIn.Text, textBoxThurEnd.Text, textBoxThurTotal.Text) + Environment.NewLine +
+                String.Format("Fri) {0}, {1}, {2}, {3}, {4}", textBoxFriStart.Text, textBoxFriLunchOut.Text, textBoxFriLunchIn.Text, textBoxFriEnd.Text, textBoxFriTotal.Text) + Environment.NewLine;
 
             File.WriteAllText("hours.txt", hoursFile);
 

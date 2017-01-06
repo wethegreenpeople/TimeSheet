@@ -16,6 +16,7 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using System.Net;
 
 namespace TimeSheet
 {
@@ -41,6 +42,17 @@ namespace TimeSheet
             {
                 File.WriteAllText("EmployeeInfo.txt", employeeFile);
             }
+            if (File.Exists("time.pdf") == false)
+            {
+                WebClient client = new WebClient();
+                client.DownloadFile("http://uraqt.xyz/uselessprograms/time.pdf", "time.pdf");
+            }
+            if (File.Exists("client_secret.json") == false)
+            {
+                WebClient client = new WebClient();
+                client.DownloadFile("http://uraqt.xyz/uselessprograms/client_secret.json", "client_secret.json");
+            }
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -543,51 +555,67 @@ namespace TimeSheet
             
             ParseHours hours = new ParseHours();
             CheckIfValidTime check = new CheckIfValidTime();
-            if (hours.mondayStart != "0")
+            int count = 0;
+            if (hours.mondayStart != " 0")
             {
                 if (check.checkValid() == false)
                 {
                     MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
                 }
-                else if (hours.tuesdayStart != "0")
+                else
                 {
-                    if (check.checkValid() == false)
-                    {
-                        MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                    }
-                    else if (hours.wednesdayStart != "0")
-                    {
-                        if (check.checkValid() == false)
-                        {
-                            MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                        }
-                        else if (hours.thursdayStart != "0")
-                        {
-                            if (check.checkValid() == false)
-                            {
-                                MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                            }
-                            else if (hours.fridayStart != "0")
-                            {
-                                if (check.checkValid() == false)
-                                {
-                                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Added your schedule to your calendar!", "Success", MessageBoxButtons.OK);
-                                    calendar.AddToCalendar();
-                                }
-                            }
-                        }
-                        
-                    }
-                    
+                    ++count;
                 }
-                
             }
-            
-            
+            if (hours.tuesdayStart != " 0")
+            {
+                if (check.checkValid() == false)
+                {
+                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    ++count;
+                }
+            }
+            if (hours.wednesdayStart != " 0")
+            {
+                if (check.checkValid() == false)
+                {
+                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    ++count;
+                }
+            }
+            if (hours.thursdayStart != " 0")
+            {
+                if (check.checkValid() == false)
+                {
+                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    ++count;
+                }
+            }
+            if (hours.fridayStart != " 0")
+            {
+                if (check.checkValid() == false)
+                {
+                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    ++count;
+                }
+            }
+            if (count == 5)
+            {
+                MessageBox.Show("Added to calendar!", "Success", MessageBoxButtons.OK);
+                calendar.AddToCalendar(true);
+            }
         }
     }
 }

@@ -15,13 +15,20 @@ namespace TimeSheet
             hours.HoursWorked();
             bool valid = true;
 
-            if (hours.mondayStart.Contains(":") == false || hours.mondayEnd.Contains(":") == false
+            if (hours.mondayStart != " 0")
+            {
+                if (hours.mondayStart.Contains(":") == false || hours.mondayEnd.Contains(":") == false
                 || hours.tuesdayStart.Contains(":") == false || hours.tuesdayEnd.Contains(":") == false
                 || hours.wednesdayStart.Contains(":") == false || hours.wednesdayEnd.Contains(":") == false
                 || hours.thursdayStart.Contains(":") == false || hours.thursdayEnd.Contains(":") == false
                 || hours.fridayStart.Contains(":") == false || hours.fridayEnd.Contains(":") == false)
+                {
+                    valid = false;
+                }
+            }
+            else if (hours.mondayStart == "0")
             {
-                valid = false;
+                valid = true;
             }
 
             return valid;
