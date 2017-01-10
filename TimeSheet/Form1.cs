@@ -554,64 +554,49 @@ namespace TimeSheet
             }
             
             ParseHours hours = new ParseHours();
+            hours.HoursWorked();
             CheckIfValidTime check = new CheckIfValidTime();
             int count = 0;
             if (hours.mondayStart != " 0")
             {
-                if (check.checkValid() == false)
-                {
-                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                }
-                else
+                if (check.checkValid("Monday") == false)
                 {
                     ++count;
                 }
             }
             if (hours.tuesdayStart != " 0")
             {
-                if (check.checkValid() == false)
-                {
-                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                }
-                else
+                if (check.checkValid("Tuesday") == false)
                 {
                     ++count;
                 }
             }
             if (hours.wednesdayStart != " 0")
             {
-                if (check.checkValid() == false)
-                {
-                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                }
-                else
+                if (check.checkValid("Wednesday") == false)
                 {
                     ++count;
                 }
             }
             if (hours.thursdayStart != " 0")
             {
-                if (check.checkValid() == false)
-                {
-                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                }
-                else
+                if (check.checkValid("Thursday") == false)
                 {
                     ++count;
                 }
             }
             if (hours.fridayStart != " 0")
             {
-                if (check.checkValid() == false)
-                {
-                    MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
-                }
-                else
+                if (check.checkValid("Friday") == false)
                 {
                     ++count;
                 }
             }
-            if (count == 5)
+            if (count > 0)
+            {
+                MessageBox.Show("Please make sure your times are in the correct format (<HH>:<MM>), and/or have '0' in empty spaces", "Error", MessageBoxButtons.OK);
+            }
+            else if (count == 0)
             {
                 MessageBox.Show("Added to calendar!", "Success", MessageBoxButtons.OK);
                 calendar.AddToCalendar(true);

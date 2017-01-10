@@ -104,42 +104,6 @@ namespace TimeSheet
                             }
                         }
                     }
-                    
-                    if (textBox.TabIndex == 5 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
-                    {
-                        textBoxMonStart.Text = "8:00 AM";
-                        textBoxMonLunchOut.Text = "12:00 PM";
-                        textBoxMonLunchIn.Text = "1:00 PM";
-                        textBoxMonEnd.Text = "5:00 PM";
-                    }
-                    else if (textBox.TabIndex == 10 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
-                    {
-                        textBoxTueStart.Text = "8:00 AM";
-                        textBoxTueLunchOut.Text = "12:00 PM";
-                        textBoxTueLunchIn.Text = "1:00 PM";
-                        textBoxTueEnd.Text = "5:00 PM";
-                    }
-                    else if (textBox.TabIndex == 15 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
-                    {
-                        textBoxWedStart.Text = "8:00 AM";
-                        textBoxWedLunchOut.Text = "12:00 PM";
-                        textBoxWedLunchIn.Text = "1:00 PM";
-                        textBoxWedEnd.Text = "5:00 PM";
-                    }
-                    else if (textBox.TabIndex == 20 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
-                    {
-                        textBoxThurStart.Text = "8:00 AM";
-                        textBoxThurLunchOut.Text = "12:00 PM";
-                        textBoxThurLunchIn.Text = "1:00 PM";
-                        textBoxThurEnd.Text = "5:00 PM";
-                    }
-                    else if (textBox.TabIndex == 25 && (textBoxMonStart.Text == "0" || string.IsNullOrWhiteSpace(textBoxMonStart.Text) == true) && textBox.Text.Contains("8") == true)
-                    {
-                        textBoxFriStart.Text = "8:00 AM";
-                        textBoxFriLunchOut.Text = "12:00 PM";
-                        textBoxFriLunchIn.Text = "1:00 PM";
-                        textBoxFriEnd.Text = "5:00 PM";
-                    }
                 }
             }
 
@@ -165,7 +129,92 @@ namespace TimeSheet
 
         private void textBoxWedTotal_TextChanged(object sender, EventArgs e)
         {
+            if (textBoxWedTotal.Text == "8" && textBoxWedStart.Text == "0" && textBoxWedEnd.Text == "0")
+            {
+                textBoxWedStart.Text = "8:00 AM";
+                textBoxWedLunchOut.Text = "12:00 PM";
+                textBoxWedLunchIn.Text = "1:00 PM";
+                textBoxWedEnd.Text = "5:00 PM";
+            }
+            if (textBoxWedTotal.Text != "8" && textBoxWedStart.Text == "8:00 AM" && textBoxWedEnd.Text == "5:00 PM")
+            {
+                textBoxWedStart.Text = "0";
+                textBoxWedLunchOut.Text = "0";
+                textBoxWedLunchIn.Text = "0";
+                textBoxWedEnd.Text = "0";
+            }
+        }
 
+        private void textBoxMonTotal_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxMonTotal.Text == "8" && textBoxMonStart.Text == "0" && textBoxMonEnd.Text == "0")
+            {
+                textBoxMonStart.Text = "8:00 AM";
+                textBoxMonLunchOut.Text = "12:00 PM";
+                textBoxMonLunchIn.Text = "1:00 PM";
+                textBoxMonEnd.Text = "5:00 PM";
+            }
+            if (textBoxMonTotal.Text != "8" && textBoxMonStart.Text == "8:00 AM" && textBoxMonEnd.Text == "5:00 PM")
+            {
+                textBoxMonStart.Text = "0";
+                textBoxMonLunchOut.Text = "0";
+                textBoxMonLunchIn.Text = "0";
+                textBoxMonEnd.Text = "0";
+            }
+        }
+
+        private void textBoxTueTotal_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxTueTotal.Text == "8" && textBoxTueStart.Text == "0" && textBoxTueEnd.Text == "0")
+            {
+                textBoxTueStart.Text = "8:00 AM";
+                textBoxTueLunchOut.Text = "12:00 PM";
+                textBoxTueLunchIn.Text = "1:00 PM";
+                textBoxTueEnd.Text = "5:00 PM";
+            }
+            if (textBoxTueTotal.Text != "8" && textBoxTueStart.Text == "8:00 AM" && textBoxTueEnd.Text == "5:00 PM")
+            {
+                textBoxTueStart.Text = "0";
+                textBoxTueLunchOut.Text = "0";
+                textBoxTueLunchIn.Text = "0";
+                textBoxTueEnd.Text = "0";
+            }
+        }
+
+        private void textBoxThurTotal_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxThurTotal.Text == "8" && textBoxThurStart.Text == "0" && textBoxThurEnd.Text == "0")
+            {
+                textBoxThurStart.Text = "8:00 AM";
+                textBoxThurLunchOut.Text = "12:00 PM";
+                textBoxThurLunchIn.Text = "1:00 PM";
+                textBoxThurEnd.Text = "5:00 PM";
+            }
+            if (textBoxThurTotal.Text != "8" && textBoxThurStart.Text == "8:00 AM" && textBoxThurEnd.Text == "5:00 PM")
+            {
+                textBoxThurStart.Text = "0";
+                textBoxThurLunchOut.Text = "0";
+                textBoxThurLunchIn.Text = "0";
+                textBoxThurEnd.Text = "0";
+            }
+        }
+
+        private void textBoxFriTotal_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxFriTotal.Text == "8" && textBoxFriStart.Text == "0" && textBoxFriEnd.Text == "0")
+            {
+                textBoxFriStart.Text = "8:00 AM";
+                textBoxFriLunchOut.Text = "12:00 PM";
+                textBoxFriLunchIn.Text = "1:00 PM";
+                textBoxFriEnd.Text = "5:00 PM";
+            }
+            if (textBoxFriTotal.Text != "8" && textBoxFriStart.Text == "8:00 AM" && textBoxFriEnd.Text == "5:00 PM")
+            {
+                textBoxFriStart.Text = "0";
+                textBoxFriLunchOut.Text = "0";
+                textBoxFriLunchIn.Text = "0";
+                textBoxFriEnd.Text = "0";
+            }
         }
 
     }

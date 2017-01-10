@@ -108,35 +108,35 @@ namespace TimeSheet
 
                 while (i < x)
                 {
-                    if (dateValue.AddDays(i - 1).ToString("ddd") == "Mon" && hours.mondayStart != "0")
+                    if (dateValue.AddDays(i - 1).ToString("ddd") == "Mon" && hours.mondayStart != " 0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.mondayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.mondayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Tue" && hours.tuesdayStart != "0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Tue" && hours.tuesdayStart != " 0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.tuesdayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.tuesdayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Wed" && hours.wednesdayStart != "0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Wed" && hours.wednesdayStart != " 0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.wednesdayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.wednesdayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Thu" && hours.thursdayStart != "0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Thu" && hours.thursdayStart != " 0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.thursdayStart);
                         newEvent.End.DateTime = DateTime.Parse(dateText + hours.thursdayEnd);
                         Event createdEvent = request.Execute();
                     }
-                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Fri" && hours.fridayStart != "0")
+                    else if (dateValue.AddDays(i - 1).ToString("ddd") == "Fri" && hours.fridayStart != " 0")
                     {
                         dateText = string.Format("{0}/{1}/{2} ", DateTime.Now.Month, i, DateTime.Now.Year);
                         newEvent.Start.DateTime = DateTime.Parse(dateText + hours.fridayStart);

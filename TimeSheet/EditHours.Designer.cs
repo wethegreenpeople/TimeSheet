@@ -469,6 +469,7 @@
             this.textBoxFriTotal.Name = "textBoxFriTotal";
             this.textBoxFriTotal.Size = new System.Drawing.Size(62, 20);
             this.textBoxFriTotal.TabIndex = 25;
+            this.textBoxFriTotal.TextChanged += new System.EventHandler(this.textBoxFriTotal_TextChanged);
             // 
             // label1
             // 
@@ -486,6 +487,7 @@
             this.textBoxThurTotal.Name = "textBoxThurTotal";
             this.textBoxThurTotal.Size = new System.Drawing.Size(62, 20);
             this.textBoxThurTotal.TabIndex = 20;
+            this.textBoxThurTotal.TextChanged += new System.EventHandler(this.textBoxThurTotal_TextChanged);
             // 
             // label3
             // 
@@ -519,6 +521,7 @@
             this.textBoxTueTotal.Name = "textBoxTueTotal";
             this.textBoxTueTotal.Size = new System.Drawing.Size(62, 20);
             this.textBoxTueTotal.TabIndex = 10;
+            this.textBoxTueTotal.TextChanged += new System.EventHandler(this.textBoxTueTotal_TextChanged);
             // 
             // label5
             // 
@@ -535,6 +538,7 @@
             this.textBoxMonTotal.Name = "textBoxMonTotal";
             this.textBoxMonTotal.Size = new System.Drawing.Size(62, 20);
             this.textBoxMonTotal.TabIndex = 5;
+            this.textBoxMonTotal.TextChanged += new System.EventHandler(this.textBoxMonTotal_TextChanged);
             // 
             // label10
             // 
