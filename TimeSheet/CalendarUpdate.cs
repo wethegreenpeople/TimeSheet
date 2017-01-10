@@ -25,6 +25,7 @@ namespace TimeSheet
 
         public void AddToCalendar(bool update)
         {
+            // Making this a boolean for reasons. Dont remember what they are right now, but I remember thinking this was better for some reason. 
             if (update == true)
             {
                 UserCredential credential;
@@ -52,6 +53,7 @@ namespace TimeSheet
                     ApplicationName = ApplicationName,
                 });
 
+                // Grabbing the hours
                 ParseHours hours = new ParseHours();
                 hours.HoursWorked();
                 DateTime dateValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -59,6 +61,7 @@ namespace TimeSheet
 
                 string calendarDate = "1/1/2017 ";
 
+                // Making one event with 'default' settings. So if something goes wrong it posts it to your current day between 8 and 10 AM
                 Event newEvent = new Event()
                 {
                     Summary = "Working",
@@ -71,7 +74,7 @@ namespace TimeSheet
                     },
                     End = new EventDateTime()
                     {
-                        DateTime = DateTime.Parse(calendarDate + "8:00 AM"),
+                        DateTime = DateTime.Parse(calendarDate + "10:00 AM"),
                         TimeZone = "America/Los_Angeles",
                     },
                     Recurrence = new String[] {
@@ -87,6 +90,8 @@ namespace TimeSheet
                 EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
                 string dateText;
 
+                // We're adding dates for the first five days of the week, and then we're letting google handle the second repeat of the event
+                // We're running the loop ~7 times, but only posting on Mon-Fri
                 int i = 0;
                 int x = 0;
 

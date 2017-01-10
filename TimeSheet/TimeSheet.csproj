@@ -125,7 +125,6 @@
     </Compile>
     <Compile Include="ParseEmpInfo.cs" />
     <Compile Include="ParseHours.cs" />
-    <Compile Include="PDFEdit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EditEmpInfo.resx">

@@ -25,6 +25,7 @@ namespace TimeSheet
         public Form1()
         {
             InitializeComponent();
+            // Making sure that the required files are available.
             string hoursFile = "Day, Work Start, Lunch Out, Lunch In, Work End, Total Hours" + Environment.NewLine + Environment.NewLine +
                 "Mon) 0, 0, 0, 0, 0" + Environment.NewLine +
                 "Tue) 0, 0, 0, 0, 0" + Environment.NewLine +
@@ -45,12 +46,12 @@ namespace TimeSheet
             if (File.Exists("time.pdf") == false)
             {
                 WebClient client = new WebClient();
-                client.DownloadFile("http://uraqt.xyz/uselessprograms/time.pdf", "time.pdf");
+                client.DownloadFile("http://uraqt.xyz/uselessprograms/time.pdf", "time.pdf"); // Downloading the .pdf from uraqt.xyz
             }
             if (File.Exists("client_secret.json") == false)
             {
                 WebClient client = new WebClient();
-                client.DownloadFile("http://uraqt.xyz/uselessprograms/client_secret.json", "client_secret.json");
+                client.DownloadFile("http://uraqt.xyz/uselessprograms/client_secret.json", "client_secret.json"); // same
             }
 
         }
@@ -75,74 +76,13 @@ namespace TimeSheet
 
         }
 
-        public class Helper
-        {
-
-            public static DataTable DataTableFromTextFile(string location, char delimiter = ',')
-            {
-                DataTable result;
-
-                string[] LineArray = File.ReadAllLines(location);
-
-                result = FormDataTable(LineArray, delimiter);
-
-                return result;
-            }
-
-
-            private static DataTable FormDataTable(string[] LineArray, char delimiter)
-            {
-                bool IsHeaderSet = false;
-
-                DataTable dt = new DataTable();
-
-                AddColumnToTable(LineArray, delimiter, ref dt);
-
-                AddRowToTable(LineArray, delimiter, ref dt);
-
-                return dt;
-            }
-
-
-            private static void AddRowToTable(string[] valueCollection, char delimiter, ref DataTable dt)
-            {
-
-                for (int i = 1; i < valueCollection.Length; i++)
-                {
-                    string[] values = valueCollection[i].Split(delimiter);
-
-                    DataRow dr = dt.NewRow();
-
-                    for (int j = 0; j < values.Length; j++)
-                    {
-                        dr[j] = values[j];
-                    }
-
-                    dt.Rows.Add(dr);
-                }
-            }
-
-
-            private static void AddColumnToTable(string[] columnCollection, char delimiter, ref DataTable dt)
-            {
-                string[] columns = columnCollection[0].Split(delimiter);
-
-                foreach (string columnName in columns)
-                {
-                    DataColumn dc = new DataColumn(columnName, typeof(string));
-                    dt.Columns.Add(dc);
-                }
-
-            }
-
-        }
-
         public void ReplacePdfForm()
         {
             DateTime dateValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             string fileNameExisting = "time.pdf";
             string fileNameNew = "TimeSheet" + dateValue.Month + dateValue.Year + ".pdf";
 
+            // Making strings to check which date range was selected
             string a = "1st - 15th";
             string b = "16th - 30th";
             string c = "16th - 31st";
@@ -205,7 +145,7 @@ namespace TimeSheet
                         }
                         
                     }
-                }
+                } // foreach field on PDF
 
                 int x = 16;
                 // Adding working in hours
@@ -265,9 +205,9 @@ namespace TimeSheet
                                         default:
 
                                             break;
-                                    }
+                                    } // Switch
                                 }
-                            }
+                            } // if 1st - 15th
 
                             //16th - 30th
                             else if (b.Equals(listBox1.SelectedItem))
@@ -319,11 +259,11 @@ namespace TimeSheet
                                         default:
 
                                             break;
-                                    }
+                                    } // switch
                                 }
-                            }
+                            } // if 16th - 30th
 
-                            //16th - 30th
+                            //16th - 31st
                             if (c.Equals(listBox1.SelectedItem))
                             {
                                 x = 17;
@@ -374,15 +314,12 @@ namespace TimeSheet
                                         default:
 
                                             break;
-                                    }
+                                    } // switch
                                 }
-
-
-                            }
-
+                            } // if 16th - 31st
                         }
-                    }
-                }
+                    } // foreach field
+                } // try
 
                 catch (Exception ex)
                 {
@@ -391,6 +328,7 @@ namespace TimeSheet
                 
 
 
+                // Adding employee info
                 foreach (string fieldKey in fieldKeys)
                 {
                     switch (fieldKey)
@@ -441,9 +379,8 @@ namespace TimeSheet
                         case "HoursTotal Hours":
                             form.SetField(fieldKey, Convert.ToString(hoursTotalInt));
                             break;
-                    }
-
-                }
+                    } // switch
+                } // foreach field
 
                 stamper.Close();
                 pdfReader.Close();
@@ -452,8 +389,6 @@ namespace TimeSheet
 
         private void button1_Click(object sender, EventArgs e)
         {
-            PDFEdit editpdf = new PDFEdit();
-
             string a = "1st - 15th";
             string b = "16th - 30th";
             string c = "16th - 31st";
@@ -495,8 +430,6 @@ namespace TimeSheet
             {
                 MessageBox.Show("Please select a date range before trying to generate timesheet!", "Error", MessageBoxButtons.OK);
             }
-
-             
         }
 
 
@@ -510,6 +443,7 @@ namespace TimeSheet
 
         }
 
+        // Editing hours
         private void button2_Click(object sender, EventArgs e)
         {
             EditHours hours = new EditHours();
@@ -517,6 +451,7 @@ namespace TimeSheet
             hours.Show();
         }
 
+        // Editing employee info
         private void button3_Click(object sender, EventArgs e)
         {
             EditEmpInfo empInfo = new EditEmpInfo();
@@ -557,6 +492,11 @@ namespace TimeSheet
             hours.HoursWorked();
             CheckIfValidTime check = new CheckIfValidTime();
             int count = 0;
+            // k. so. whats going on here is we're checking if you're working
+            // then we're checking if the way the time has been entered is valid
+            // if it's not valid we're adding one to the count
+            // if at the end the count is > 0 we display an error
+            // this was my quick way of making sure we don't display an error one million times
             if (hours.mondayStart != " 0")
             {
                 if (check.checkValid("Monday") == false)

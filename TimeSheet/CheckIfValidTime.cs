@@ -15,6 +15,11 @@ namespace TimeSheet
             hours.HoursWorked();
             bool valid = true;
 
+            // This whole thing is fucky
+            // We're taking the day of the week, checking if it's a working day (has no 0 in the first field for the day)
+            // If it's a working day, both mondayStart and end should include ':'
+            // if they don't it's not a valid time
+            // This is for both a bit of standardization as well as ensuring that the time works with the calendar update
             if (dayOfWeek == "Monday")
             {
                 if (hours.mondayStart != "0" || hours.mondayStart != " 0")
@@ -85,8 +90,6 @@ namespace TimeSheet
                     valid = true;
                 }
             }
-
-            
 
             return valid;
         }

@@ -20,6 +20,8 @@ namespace TimeSheet
             ParseHours hours = new ParseHours();
             hours.HoursWorked();
 
+            // We're auto-populating all the textboxes with the values in the .txt file. It'll either be
+            // zero, or something that the user has filled in previously.
             textBoxMonStart.Text = hours.mondayStart.Trim();
             textBoxMonEnd.Text = hours.mondayEnd.Trim();
             textBoxMonLunchIn.Text = hours.mondayBreakEnd.Trim();
@@ -70,9 +72,14 @@ namespace TimeSheet
                     // If not a total
                     if (textBox.TabIndex != 5 && textBox.TabIndex != 10 && textBox.TabIndex != 15 && textBox.TabIndex != 20 && textBox.TabIndex != 25)
                     {
+                        // If user enters a time that isn't formatted correctly (ex: 8 AM instead of 8:00 AM) this will adjust the format
+                        // Doing this so it's a little more standard, and it'll work properly with the calendar update
+                        // which is understandably picky with the time formatting
+
                         // If not a day that you're not working
                         if (textBox.Text != "0")
                         {
+                            // if the textbox is only missing AM/PM (ex: 8:00)
                             if (textBox.Text.Contains("AM") == false && textBox.Text.Contains("PM") == false)
                             {
                                 if (textBox.Text.Contains(':') == true)
@@ -88,6 +95,7 @@ namespace TimeSheet
                                         textBox.Text += " PM";
                                     }
                                 }
+                                // If it's only a number (ex: 8)
                                 else
                                 {
                                     if (Convert.ToInt32(textBox.Text.Trim()) > 6 && Convert.ToInt32(textBox.Text.Trim()) <= 11)
@@ -109,6 +117,7 @@ namespace TimeSheet
 
             ParseHours hours = new ParseHours();
 
+            // Adding it to the hours.txt file
             string hoursFile =
                 "Day, Work Start, Lunch Out, Lunch In, Work End, Total Hours" + Environment.NewLine + Environment.NewLine +
                 String.Format("Mon) {0}, {1}, {2}, {3}, {4}", textBoxMonStart.Text, textBoxMonLunchOut.Text, textBoxMonLunchIn.Text, textBoxMonEnd.Text, textBoxMonTotal.Text) + Environment.NewLine +
@@ -127,6 +136,8 @@ namespace TimeSheet
 
         }
 
+        // If the total hours is set to 8, and the other boxes are 0's, it will autofill the boxes with hours between 8 - 5
+        // Doing each '_TextChanged' individually so the user can see the imediate change
         private void textBoxWedTotal_TextChanged(object sender, EventArgs e)
         {
             if (textBoxWedTotal.Text == "8" && textBoxWedStart.Text == "0" && textBoxWedEnd.Text == "0")
