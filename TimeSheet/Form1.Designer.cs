@@ -1,6 +1,6 @@
 ﻿namespace TimeSheet
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,91 +28,182 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.buttonGenerate = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editHoursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editEmployeeInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addHoursToCalendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.usageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBoxPayRange = new System.Windows.Forms.GroupBox();
+            this.radioButton31st = new System.Windows.Forms.RadioButton();
+            this.radioButton30th = new System.Windows.Forms.RadioButton();
+            this.radioButton15th = new System.Windows.Forms.RadioButton();
+            this.menuStrip1.SuspendLayout();
+            this.groupBoxPayRange.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listBox1
+            // buttonGenerate
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "1st - 15th",
-            "16th - 30th",
-            "16th - 31st"});
-            this.listBox1.Location = new System.Drawing.Point(2, 21);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 43);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged_1);
+            this.buttonGenerate.Location = new System.Drawing.Point(12, 119);
+            this.buttonGenerate.Name = "buttonGenerate";
+            this.buttonGenerate.Size = new System.Drawing.Size(233, 53);
+            this.buttonGenerate.TabIndex = 2;
+            this.buttonGenerate.Text = "Generate Timesheet";
+            this.buttonGenerate.UseVisualStyleBackColor = true;
+            this.buttonGenerate.Click += new System.EventHandler(this.buttonGenerate_Click);
             // 
-            // label1
+            // menuStrip1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(63, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Pay Range ";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(257, 24);
+            this.menuStrip1.TabIndex = 8;
+            this.menuStrip1.Text = "menuStrip1";
             // 
-            // button1
+            // fileToolStripMenuItem
             // 
-            this.button1.Location = new System.Drawing.Point(150, 21);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Generate Timesheet";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editInfoToolStripMenuItem,
+            this.addHoursToCalendarToolStripMenuItem,
+            this.checkForUpdatesToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
             // 
-            // button2
+            // editInfoToolStripMenuItem
             // 
-            this.button2.Location = new System.Drawing.Point(150, 50);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(95, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Edit Hours";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.editInfoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editHoursToolStripMenuItem,
+            this.editEmployeeInfoToolStripMenuItem});
+            this.editInfoToolStripMenuItem.Name = "editInfoToolStripMenuItem";
+            this.editInfoToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.editInfoToolStripMenuItem.Text = "Edit Info";
             // 
-            // button3
+            // editHoursToolStripMenuItem
             // 
-            this.button3.Location = new System.Drawing.Point(150, 79);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(95, 23);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "EMP/Info";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.editHoursToolStripMenuItem.Name = "editHoursToolStripMenuItem";
+            this.editHoursToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.editHoursToolStripMenuItem.Text = "Edit Hours";
+            this.editHoursToolStripMenuItem.Click += new System.EventHandler(this.buttonEditHours_Click);
             // 
-            // button4
+            // editEmployeeInfoToolStripMenuItem
             // 
-            this.button4.Location = new System.Drawing.Point(150, 108);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(95, 23);
-            this.button4.TabIndex = 6;
-            this.button4.Text = "Add to Calendar";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.editEmployeeInfoToolStripMenuItem.Name = "editEmployeeInfoToolStripMenuItem";
+            this.editEmployeeInfoToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.editEmployeeInfoToolStripMenuItem.Text = "Edit Employee Info";
+            this.editEmployeeInfoToolStripMenuItem.Click += new System.EventHandler(this.buttonEditEmpInfo_Click);
             // 
-            // Form1
+            // addHoursToCalendarToolStripMenuItem
+            // 
+            this.addHoursToCalendarToolStripMenuItem.Name = "addHoursToCalendarToolStripMenuItem";
+            this.addHoursToCalendarToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.addHoursToCalendarToolStripMenuItem.Text = "Add Hours to Calendar";
+            this.addHoursToCalendarToolStripMenuItem.Click += new System.EventHandler(this.buttonAddToCalendar_Click);
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.buttonUpdate_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.usageToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // usageToolStripMenuItem
+            // 
+            this.usageToolStripMenuItem.Name = "usageToolStripMenuItem";
+            this.usageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.usageToolStripMenuItem.Text = "Usage";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // groupBoxPayRange
+            // 
+            this.groupBoxPayRange.Controls.Add(this.radioButton31st);
+            this.groupBoxPayRange.Controls.Add(this.radioButton30th);
+            this.groupBoxPayRange.Controls.Add(this.radioButton15th);
+            this.groupBoxPayRange.Location = new System.Drawing.Point(12, 27);
+            this.groupBoxPayRange.Name = "groupBoxPayRange";
+            this.groupBoxPayRange.Size = new System.Drawing.Size(120, 86);
+            this.groupBoxPayRange.TabIndex = 9;
+            this.groupBoxPayRange.TabStop = false;
+            this.groupBoxPayRange.Text = "Pay Range";
+            // 
+            // radioButton31st
+            // 
+            this.radioButton31st.AutoSize = true;
+            this.radioButton31st.Location = new System.Drawing.Point(6, 65);
+            this.radioButton31st.Name = "radioButton31st";
+            this.radioButton31st.Size = new System.Drawing.Size(75, 17);
+            this.radioButton31st.TabIndex = 2;
+            this.radioButton31st.TabStop = true;
+            this.radioButton31st.Text = "16th - 31st";
+            this.radioButton31st.UseVisualStyleBackColor = true;
+            // 
+            // radioButton30th
+            // 
+            this.radioButton30th.AutoSize = true;
+            this.radioButton30th.Location = new System.Drawing.Point(6, 42);
+            this.radioButton30th.Name = "radioButton30th";
+            this.radioButton30th.Size = new System.Drawing.Size(76, 17);
+            this.radioButton30th.TabIndex = 1;
+            this.radioButton30th.TabStop = true;
+            this.radioButton30th.Text = "16th - 30th";
+            this.radioButton30th.UseVisualStyleBackColor = true;
+            // 
+            // radioButton15th
+            // 
+            this.radioButton15th.AutoSize = true;
+            this.radioButton15th.Location = new System.Drawing.Point(6, 19);
+            this.radioButton15th.Name = "radioButton15th";
+            this.radioButton15th.Size = new System.Drawing.Size(69, 17);
+            this.radioButton15th.TabIndex = 0;
+            this.radioButton15th.TabStop = true;
+            this.radioButton15th.Text = "1st - 15th";
+            this.radioButton15th.UseVisualStyleBackColor = true;
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(257, 144);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.listBox1);
-            this.Name = "Form1";
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(257, 174);
+            this.Controls.Add(this.groupBoxPayRange);
+            this.Controls.Add(this.buttonGenerate);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
+            this.Name = "MainForm";
             this.Text = "Timesheet Generator";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.groupBoxPayRange.ResumeLayout(false);
+            this.groupBoxPayRange.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -120,12 +211,22 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button buttonGenerate;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem usageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editInfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editHoursToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editEmployeeInfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem addHoursToCalendarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBoxPayRange;
+        private System.Windows.Forms.RadioButton radioButton15th;
+        private System.Windows.Forms.RadioButton radioButton31st;
+        private System.Windows.Forms.RadioButton radioButton30th;
     }
 }
 

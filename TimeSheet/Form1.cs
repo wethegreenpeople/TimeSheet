@@ -17,14 +17,25 @@ using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System.Net;
+using HtmlAgilityPack;
+using AutoUpdaterDotNET;
+using System.Net;
 
 namespace TimeSheet
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
+            UpdateProgram.CheckForUpdates("newestversion.ini");
+            // If running right after an update, make sure we're renaming the file
+            if (System.AppDomain.CurrentDomain.FriendlyName == "Update.exe")
+            {
+                File.Delete("TimeSheet.exe");
+                File.Move("Update.exe", "TimeSheet.exe");
+            }
+
             // Making sure that the required files are available.
             string hoursFile = "Day, Work Start, Lunch Out, Lunch In, Work End, Total Hours" + Environment.NewLine + Environment.NewLine +
                 "Mon) 0, 0, 0, 0, 0" + Environment.NewLine +
@@ -48,32 +59,6 @@ namespace TimeSheet
                 WebClient client = new WebClient();
                 client.DownloadFile("http://uraqt.xyz/uselessprograms/time.pdf", "time.pdf"); // Downloading the .pdf from uraqt.xyz
             }
-            if (File.Exists("client_secret.json") == false)
-            {
-                WebClient client = new WebClient();
-                client.DownloadFile("http://uraqt.xyz/uselessprograms/client_secret.json", "client_secret.json"); // same
-            }
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
         }
 
         public void ReplacePdfForm()
@@ -81,11 +66,6 @@ namespace TimeSheet
             DateTime dateValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             string fileNameExisting = "time.pdf";
             string fileNameNew = "TimeSheet" + dateValue.Month + dateValue.Year + ".pdf";
-
-            // Making strings to check which date range was selected
-            string a = "1st - 15th";
-            string b = "16th - 30th";
-            string c = "16th - 31st";
 
             double hoursTotalInt = 0;
 
@@ -112,40 +92,38 @@ namespace TimeSheet
                 var form = stamper.AcroFields;
                 var fieldKeys = form.Fields.Keys;
 
-                // Adding the dates to the table
-                foreach (string fieldKey in fieldKeys)
+                if (radioButton15th.Checked)
                 {
                     for (int i = 1; i < 16; ++i)
                     {
-                        if (a.Equals(listBox1.SelectedItem))
-                        {
-                            if (fieldKey.Equals("DateRow" + i))
-                            {
-                                string dateText = string.Format("{0}/{1}/{2}", DateTime.Now.Month, i, DateTime.Now.Year);
-                                form.SetField(fieldKey, dateText);
-                            }
-                        }
-                        if (b.Equals(listBox1.SelectedItem))
-                        {
-                            if (fieldKey.Equals("DateRow" + i))
-                            {
-                                string dateText = string.Format("{0}/{1}/{2}", DateTime.Now.Month, i + 15, DateTime.Now.Year);
-                                form.SetField(fieldKey, dateText);
-                            }
-                        }
-                        if (c.Equals(listBox1.SelectedItem))
-                        {
-                            if (fieldKey.Equals("DateRow" + i))
-                            {
-                                string dateText = string.Format("{0}/{1}/{2}", DateTime.Now.Month, i + 15, DateTime.Now.Year);
-                                form.SetField(fieldKey, dateText);
-                            }
-                            string extraDateText = string.Format("{0}/31/{2}", DateTime.Now.Month, i + 15, DateTime.Now.Year);
-                            form.SetField("DateRow16", extraDateText);
-                        }
-                        
+                        // We're building a date: DD/MM/YYYY
+                        // fieldKey is the name of the textbox where the date is being entered
+                        // Then we set it
+                        string dateText = string.Format("{0}/{1}/{2}", DateTime.Now.Month, i, DateTime.Now.Year);
+                        string fieldKey = string.Format("DateRow{0}", i);
+                        form.SetField(fieldKey, dateText);
                     }
-                } // foreach field on PDF
+                }
+                else if (radioButton30th.Checked)
+                {
+                    for (int i = 1; i < 16; ++i)
+                    {
+                        string dateText = string.Format("{0}/{1}/{2}", DateTime.Now.Month, i + 15, DateTime.Now.Year);
+                        string fieldKey = string.Format("DateRow{0}", i);
+                        form.SetField(fieldKey, dateText);
+                    }
+                }
+                else if (radioButton31st.Checked)
+                {
+                    for (int i = 1; i < 16; ++i)
+                    {
+                        string dateText = string.Format("{0}/{1}/{2}", DateTime.Now.Month, i + 15, DateTime.Now.Year);
+                        string fieldKey = string.Format("DateRow{0}", i);
+                        form.SetField(fieldKey, dateText);
+                    }
+                    string extraDateText = string.Format("{0}/31/{1}", DateTime.Now.Month, DateTime.Now.Year);
+                    form.SetField("DateRow16", extraDateText);
+                }
 
                 int x = 16;
                 // Adding working in hours
@@ -156,7 +134,7 @@ namespace TimeSheet
                         for (int i = 1; i < x; ++i)
                         {
                             // 1st - 15th
-                            if (a.Equals(listBox1.SelectedItem))
+                            if (radioButton15th.Checked)
                             {
                                 if (fieldKey.Equals("Work StartRow" + i))
                                 {
@@ -210,7 +188,7 @@ namespace TimeSheet
                             } // if 1st - 15th
 
                             //16th - 30th
-                            else if (b.Equals(listBox1.SelectedItem))
+                            else if (radioButton30th.Checked)
                             {
                                 if (fieldKey.Equals("Work StartRow" + i))
                                 {
@@ -264,7 +242,7 @@ namespace TimeSheet
                             } // if 16th - 30th
 
                             //16th - 31st
-                            if (c.Equals(listBox1.SelectedItem))
+                            if (radioButton31st.Checked)
                             {
                                 x = 17;
                                 if (fieldKey.Equals("Work StartRow" + i))
@@ -325,74 +303,42 @@ namespace TimeSheet
                 {
                     MessageBox.Show(ex.Message);
                 }
-                
 
+                // Adding employee info into the PDF
+                form.SetField("Last Name", empLast);
+                form.SetField("First Name", empFirst);
+                form.SetField("Employee ID", empNSHE);
+                form.SetField("HoursTotal Hours", Convert.ToString(hoursTotalInt));
 
-                // Adding employee info
-                foreach (string fieldKey in fieldKeys)
+                if (radioButton15th.Checked)
                 {
-                    switch (fieldKey)
-                    {
-                        case "Last Name":
-                            form.SetField(fieldKey, empLast);
-                            break;
-                        case "First Name":
-                            form.SetField(fieldKey, empFirst);
-                            break;
-                        case "Pay Period From To":
-                            if (a.Equals(listBox1.SelectedItem))
-                            {
-                                string fromDate = DateTime.Now.Month + "/01/" + DateTime.Now.Year;
-                                form.SetField(fieldKey, fromDate);
-                            }
-                            if (b.Equals(listBox1.SelectedItem))
-                            {
-                                string fromDate = DateTime.Now.Month + "/16/" + DateTime.Now.Year;
-                                form.SetField(fieldKey, fromDate);
-                            }
-                            else if (c.Equals(listBox1.SelectedItem))
-                            {
-                                string fromDate = DateTime.Now.Month + "/16/" + DateTime.Now.Year;
-                                form.SetField(fieldKey, fromDate);
-                            }
-                            break;
-                        case "Pay Period To":
-                            if (a.Equals(listBox1.SelectedItem))
-                            {
-                                string fromDate = DateTime.Now.Month + "/15/" + DateTime.Now.Year;
-                                form.SetField(fieldKey, fromDate);
-                            }
-                            if (b.Equals(listBox1.SelectedItem))
-                            {
-                                string fromDate = DateTime.Now.Month + "/30/" + DateTime.Now.Year;
-                                form.SetField(fieldKey, fromDate);
-                            }
-                            else if (c.Equals(listBox1.SelectedItem))
-                            {
-                                string fromDate = DateTime.Now.Month + "/31/" + DateTime.Now.Year;
-                                form.SetField(fieldKey, fromDate);
-                            }
-                            break;
-                        case "Employee ID":
-                            form.SetField(fieldKey, empNSHE);
-                            break;
-                        case "HoursTotal Hours":
-                            form.SetField(fieldKey, Convert.ToString(hoursTotalInt));
-                            break;
-                    } // switch
-                } // foreach field
+                    string fromDate = DateTime.Now.Month + "/01/" + DateTime.Now.Year;
+                    string toDate = DateTime.Now.Month + "/15/" + DateTime.Now.Year;
+                    form.SetField("Pay Period From To", fromDate);
+                    form.SetField("Pay Period To", toDate);
+                }
+                if (radioButton30th.Checked)
+                {
+                    string fromDate = DateTime.Now.Month + "/16/" + DateTime.Now.Year;
+                    string toDate = DateTime.Now.Month + "/30/" + DateTime.Now.Year;
+                    form.SetField("Pay Period From To", fromDate);
+                    form.SetField("Pay Period To", toDate);
+                }
+                else if (radioButton31st.Checked)
+                {
+                    string fromDate = DateTime.Now.Month + "/16/" + DateTime.Now.Year;
+                    string toDate = DateTime.Now.Month + "/31/" + DateTime.Now.Year;
+                    form.SetField("Pay Period From To", fromDate);
+                    form.SetField("Pay Period To", toDate);
+                }
 
                 stamper.Close();
                 pdfReader.Close();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonGenerate_Click(object sender, EventArgs e)
         {
-            string a = "1st - 15th";
-            string b = "16th - 30th";
-            string c = "16th - 31st";
-
             string mondayHours = File.ReadLines("hours.txt").Skip(2).Take(1).First();
             mondayHours = mondayHours.Split(')').Last();
             string tuesdayHours = File.ReadLines("hours.txt").Skip(3).Take(1).First();
@@ -409,18 +355,7 @@ namespace TimeSheet
             string fileHeader = string.Format("{0}{1}", "Date, Work Start, Break Out, Break In, Work End, Hours", Environment.NewLine);
             string fileFooter = string.Format("{0}{1}", ", , , , Total Hours, 0", Environment.NewLine);
 
-            if (a.Equals(listBox1.SelectedItem))
-            {
-                ReplacePdfForm();
-                MessageBox.Show("Timesheet generated!", "Success", MessageBoxButtons.OK);
-            }
-            
-            else if (b.Equals(listBox1.SelectedItem))
-            {
-                ReplacePdfForm();
-                MessageBox.Show("Timesheet generated!", "Success", MessageBoxButtons.OK);
-            }
-            else if (c.Equals(listBox1.SelectedItem))
+            if (radioButton15th.Checked || radioButton30th.Checked || radioButton31st.Checked)
             {
                 ReplacePdfForm();
                 MessageBox.Show("Timesheet generated!", "Success", MessageBoxButtons.OK);
@@ -432,19 +367,8 @@ namespace TimeSheet
             }
         }
 
-
-        private void clearTable()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         // Editing hours
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonEditHours_Click(object sender, EventArgs e)
         {
             EditHours hours = new EditHours();
 
@@ -452,7 +376,7 @@ namespace TimeSheet
         }
 
         // Editing employee info
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonEditEmpInfo_Click(object sender, EventArgs e)
         {
             EditEmpInfo empInfo = new EditEmpInfo();
 
@@ -462,26 +386,28 @@ namespace TimeSheet
         public string dateRange;
         
         // Calendar update
-        private void button4_Click(object sender, EventArgs e)
+        private void buttonAddToCalendar_Click(object sender, EventArgs e)
         {
             CalendarUpdate calendar = new CalendarUpdate();
 
-            string a = "1st - 15th";
-            string b = "16th - 30th";
-            string c = "16th - 31st";
-
-            if (a.Equals(listBox1.SelectedItem))
+            if (File.Exists("client_secret.json") == false) // File needed to access google api
             {
-                calendar.dateRange = a;
+                WebClient client = new WebClient();
+                client.DownloadFile("http://uraqt.xyz/uselessprograms/client_secret.json", "client_secret.json"); // same
             }
 
-            else if (b.Equals(listBox1.SelectedItem))
+            if (radioButton15th.Checked)
             {
-                calendar.dateRange = b;
+                calendar.dateRange = "1st - 15th";
             }
-            else if (c.Equals(listBox1.SelectedItem))
+
+            else if (radioButton30th.Checked)
             {
-                calendar.dateRange = c;
+                calendar.dateRange = "16th - 30th";
+            }
+            else if (radioButton31st.Checked)
+            {
+                calendar.dateRange = "16th - 31st";
             }
             else
             {
@@ -541,6 +467,11 @@ namespace TimeSheet
                 MessageBox.Show("Added to calendar!", "Success", MessageBoxButtons.OK);
                 calendar.AddToCalendar(true);
             }
+        }
+
+        private void buttonUpdate_Click(object sender, EventArgs e)
+        {
+            AutoUpdater.Start(@"http://uraqt.xyz/uselessprograms/timesheetupdate.xml");
         }
     }
 }

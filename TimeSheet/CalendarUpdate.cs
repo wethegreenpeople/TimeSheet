@@ -57,7 +57,7 @@ namespace TimeSheet
                 ParseHours hours = new ParseHours();
                 hours.HoursWorked();
                 DateTime dateValue = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                Form1 listbox = new Form1();
+                MainForm listbox = new MainForm();
 
                 string calendarDate = "1/1/2017 ";
 

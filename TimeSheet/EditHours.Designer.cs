@@ -612,6 +612,7 @@
             this.Controls.Add(this.labelMondayStart);
             this.Name = "EditHours";
             this.Text = "EditHours";
+            this.Load += new System.EventHandler(this.EditHours_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

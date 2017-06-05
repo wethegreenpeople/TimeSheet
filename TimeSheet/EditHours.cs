@@ -228,5 +228,10 @@ namespace TimeSheet
             }
         }
 
+        private void EditHours_Load(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

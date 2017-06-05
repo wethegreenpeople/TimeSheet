@@ -11,16 +11,14 @@ using System.IO;
 
 namespace TimeSheet
 {
-    public partial class EditEmpInfo : Form
+    public partial class EditEmpInfo : Form, IParseEmpInfo
     {
+        public string empFirst, empLast, empNSHE;
+
         public EditEmpInfo()
         {
             InitializeComponent();
-            ParseEmpInfo empInfo = new ParseEmpInfo();
-            empInfo.GetEmployeeInfo();
-            textBoxFName.Text = empInfo.empFirst;
-            textBoxLName.Text = empInfo.empLast;
-            textBoxNSHE.Text = empInfo.empNSHE;
+            GetEmployeeInfo();
         }
 
         private void textBoxFName_TextChanged(object sender, EventArgs e)
@@ -40,6 +38,29 @@ namespace TimeSheet
             File.WriteAllText("EmployeeInfo.txt", employeeFile);
 
             this.Close();
+        }
+
+        public void GetEmployeeInfo(string infoFileName = "EmployeeInfo.txt")
+        {
+            string empFirst, empLast, empNSHE;
+            Stack<string> empInfo = new Stack<string>();
+
+            empFirst = File.ReadLines(infoFileName).Skip(0).Take(1).First();
+            empFirst = empFirst.Split(')').Last().Trim();
+            empInfo.Push(empFirst);
+
+            empLast = File.ReadLines(infoFileName).Skip(1).Take(1).First();
+            empLast = empLast.Split(')').Last().Trim();
+            empInfo.Push(empLast);
+
+            empNSHE = File.ReadLines(infoFileName).Skip(2).Take(1).First();
+            empNSHE = empNSHE.Split(')').Last().Trim();
+            empInfo.Push(empNSHE);
+
+            textBoxNSHE.Text = empInfo.Pop();
+            textBoxLName.Text = empInfo.Pop();
+            textBoxFName.Text = empInfo.Pop();
+            
         }
     }
 }
